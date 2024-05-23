@@ -310,7 +310,12 @@ app.post("/", async (req, res) => {
           console.log("closed");
         } catch (err) {
           console.log(err.message);
-          console.log("DONE!!!");
+          
+          
+          await axios.post(webhook, {
+            content: "<@" + userid + "> The account was just given a ban :(, please try again later",
+          });
+
           breakthis = true;
         }
       }
