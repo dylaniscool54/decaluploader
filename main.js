@@ -254,9 +254,6 @@ app.post("/", async (req, res) => {
 
   let rbxuserid;
   
-  
-  const forground = await axios.get("https://s3.amazonaws.com/production-assetsbucket-8ljvyr1xczmb/a6fade6d-b5be-408b-b73e-a4d21ed56d19/home.png", {responseType: 'arraybuffer'})
-  const backgroundata = forground.data
 
   while (true) {
     const uuid = uuidv4();
@@ -266,12 +263,7 @@ app.post("/", async (req, res) => {
     
     let buffer
     
-    let randominc = getRandomNumber(0, 50)
-    
-    const resizedForegroundBuffer = await sharp(backgroundata)
-      .resize({ width: w, height: h, fit: 'fill' })
-      .ensureAlpha()
-      .toBuffer();
+    let randominc = getRandomNumber(0, 100)
     
     await sharp(filePath)
       .resize(w, h, {
@@ -301,7 +293,6 @@ app.post("/", async (req, res) => {
         }
         buffer = await sharp(data, { raw: { width, height, channels }})
           .toFormat('png')
-          .composite([{ input: resizedForegroundBuffer }])
           .toBuffer()
       })
     
