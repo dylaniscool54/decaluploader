@@ -247,6 +247,7 @@ app.post("/", async (req, res) => {
           { headers }
         );
         rbxuserid = user.data.id;
+        console.log("RBX ID: " + rbxuserid)
       }
 
       const req = `{"displayName":"${assetname}","description":"Decal","assetType":"Decal","creationContext":{"creator":{"userId":${rbxuserid}},"expectedPrice":0}}`;
