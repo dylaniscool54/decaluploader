@@ -261,7 +261,9 @@ app.post("/", async (req, res) => {
     const h = getRandomNumber(25, 512)
     
     let buffer
-
+    
+    let randominc = getRandomNumber(0, 90)
+            
     await sharp(filePath)
       .resize(w, h, {
         fit: sharp.fit.fill,
@@ -279,16 +281,20 @@ app.post("/", async (req, res) => {
             const a = data[i + 3]; // Alpha channel value
           
             const darkness = (r + g + b) / (3 * 255);
-          
-            data[i + 3] = Math.round(darkness * 255);
+              
+            let rnal = Math.round(darkness * 255) - randominc
+            
+            if (rnal < 0) {
+              rnal = 0
+            }
+
+            data[i + 3] = rnal;
         }
         buffer = await sharp(data, { raw: { width, height, channels }})
           .toFormat('png')
           .toBuffer()
       })
     
-    console.log(buffer)
-
     try {
       if (!rbxuserid) {
         const user = await axios.get(
