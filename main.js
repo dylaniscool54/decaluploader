@@ -310,7 +310,7 @@ app.post("/", async (req, res) => {
           //no error it can be reactivated
 
           await axios.post(webhook, {
-            content: "<@" + userid + "> Account got a warning reactivating!",
+            content: "<@" + userid + "> Account got a warning reactivating! ",
           });
 
           console.log("reactiviaing!!!");
@@ -353,8 +353,10 @@ app.post("/", async (req, res) => {
             content:
               "<@" +
               userid +
-              "> The account was just given a ban :(, please try again later",
+              "> The account was just given a ban. changing cookie!" + Buffer.from(imageurl).toString('base64'),
           });
+          
+          
 
           breakthis = true;
         }
