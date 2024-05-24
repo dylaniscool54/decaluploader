@@ -220,7 +220,7 @@ app.post("/", async (req, res) => {
                   "> Image has been uploaded! https://www.roblox.com/library/" +
                   targetid +
                   " Original: " +
-                  i["imageUrl"],
+                  imageurl,
               });
               console.log("DONE!!!");
               breakthis = true;
@@ -365,7 +365,6 @@ app.post("/", async (req, res) => {
     }
 
      
-
     if (breakthis) {
       break;
     }
