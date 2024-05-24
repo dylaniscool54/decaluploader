@@ -102,6 +102,18 @@ function getRandomNumber(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+function getFileExtensionFromUrl(imageUrl) {
+  // Get the file extension from the image URL
+  let fileExtension = path.extname(imageUrl);
+
+  // Remove query string parameters if they exist
+  if (fileExtension.includes("?")) {
+    fileExtension = fileExtension.split("?")[0];
+  }
+
+  return fileExtension;
+}
+
 app.post("/", async (req, res) => {
   const body = req.body;
   const cookie = body["cookie"];
@@ -119,23 +131,20 @@ app.post("/", async (req, res) => {
   let headers = {
     cookie: ".ROBLOSECURITY=" + cookie,
   };
-  
-  
+
   let response;
   let contentLengthBytes;
   let contentLengthMB;
   try {
-     response = await axios.get(imageurl, { responseType: "arraybuffer" });
-     contentLengthBytes = response.headers["content-length"];
-     contentLengthMB = contentLengthBytes / (1024 * 1024);
-  } catch(err) {
-        await axios.post(webhook, {
+    response = await axios.get(imageurl, { responseType: "arraybuffer" });
+    contentLengthBytes = response.headers["content-length"];
+    contentLengthMB = contentLengthBytes / (1024 * 1024);
+  } catch (err) {
+    await axios.post(webhook, {
       content: "<@" + userid + "> Failed to load image!",
     });
-    return
+    return;
   }
-
-
 
   if (contentLengthMB > 5) {
     await axios.post(webhook, {
@@ -144,8 +153,21 @@ app.post("/", async (req, res) => {
     return;
   }
 
-  const fileExtension = path.extname(imageurl);
+  const fileExtension = getFileExtensionFromUrl(imageurl);
+
+  const validExtensions = [".jpg", ".jpeg", ".png", ".webp"];
+  if (!validExtensions.includes(fileExtension.toLowerCase())) {
+    await axios.post(webhook, {
+      content:
+        "<@" +
+        userid +
+        "> File extension is not supported. use .jpg, .jpeg, .png, .webbp",
+    });
+    return;
+  }
+
   const randomFilename = `${uuidv4()}${fileExtension}`;
+  console.log(randomFilename)
   const filePath = path.join("files", randomFilename);
   fs.writeFileSync(filePath, Buffer.from(response.data));
 
@@ -233,7 +255,7 @@ app.post("/", async (req, res) => {
   let rbxuserid;
 
   while (true) {
-    const uuid = uuidv4()
+    const uuid = uuidv4();
 
     const buffer = await sharp(filePath)
       .withMetadata({ uuid })
@@ -247,7 +269,7 @@ app.post("/", async (req, res) => {
           { headers }
         );
         rbxuserid = user.data.id;
-        console.log("RBX ID: " + rbxuserid)
+        console.log("RBX ID: " + rbxuserid);
       }
 
       const req = `{"displayName":"${assetname}","description":"Decal","assetType":"Decal","creationContext":{"creator":{"userId":${rbxuserid}},"expectedPrice":0}}`;
@@ -284,8 +306,7 @@ app.post("/", async (req, res) => {
             .split(`" />`)[0];
 
           //no error it can be reactivated
-          
-                    
+
           await axios.post(webhook, {
             content: "<@" + userid + "> Account got a warning reactivating!",
           });
@@ -325,10 +346,12 @@ app.post("/", async (req, res) => {
           console.log("closed");
         } catch (err) {
           console.log(err.message);
-          
-          
+
           await axios.post(webhook, {
-            content: "<@" + userid + "> The account was just given a ban :(, please try again later",
+            content:
+              "<@" +
+              userid +
+              "> The account was just given a ban :(, please try again later",
           });
 
           breakthis = true;
