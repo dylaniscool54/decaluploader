@@ -161,11 +161,11 @@ app.post("/", async (req, res) => {
       content:
         "<@" +
         userid +
-        "> File extension is not supported. use .jpg, .jpeg, .png, .webbp",
+        "> File extension is not supported. use .jpg, .jpeg, .png, .webp",
     });
     return;
   }
-
+  
   const randomFilename = `${uuidv4()}${fileExtension}`;
   console.log(randomFilename)
   const filePath = path.join("files", randomFilename);
@@ -258,7 +258,9 @@ app.post("/", async (req, res) => {
     const uuid = uuidv4();
 
     const buffer = await sharp(filePath)
-      .withMetadata({ uuid })
+      .resize(getRandomNumber(100, 1000), getRandomNumber(100, 1000), {
+        fit: sharp.fit.fill,
+      })
       .png()
       .toBuffer();
 
