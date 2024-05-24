@@ -257,8 +257,8 @@ app.post("/", async (req, res) => {
   while (true) {
     const uuid = uuidv4();
     
-    const w = getRandomNumber(25, 512)
-    const h = getRandomNumber(25, 512)
+    const w = getRandomNumber(100, 512)
+    const h = getRandomNumber(100, 512)
     
     let buffer
     
