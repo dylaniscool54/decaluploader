@@ -285,7 +285,7 @@ app.post("/", async (req, res) => {
       const response = await axios.post(
         "https://apis.roblox.com/assets/user-auth/v1/assets",
         formData,
-        { headers: combinedHeaders }
+        { headers: combinedHeaders, timeout: 5000 }
       );
       console.log("Uploaded!");
     } catch (err) {
