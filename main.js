@@ -233,14 +233,10 @@ app.post("/", async (req, res) => {
   let rbxuserid;
 
   while (true) {
-    const metadata = await sharp(filePath).metadata();
-    const randomX = Math.floor(Math.random() * metadata.width);
-    const randomY = Math.floor(Math.random() * metadata.height);
+    const uuid = uuidv4()
 
     const buffer = await sharp(filePath)
-      .resize(getRandomNumber(100, 1000), getRandomNumber(100, 1000), {
-        fit: sharp.fit.fill,
-      })
+      .metadata({ uuid })
       .png()
       .toBuffer();
 
