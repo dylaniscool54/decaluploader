@@ -152,7 +152,7 @@ app.post("/", async (req, res) => {
     });
     return;
   }
-
+  
   const fileExtension = getFileExtensionFromUrl(imageurl);
 
   const validExtensions = [".jpg", ".jpeg", ".png", ".webp"];
@@ -256,13 +256,38 @@ app.post("/", async (req, res) => {
 
   while (true) {
     const uuid = uuidv4();
+    
+    const w = getRandomNumber(25, 512)
+    const h = getRandomNumber(25, 512)
+    
+    let buffer
 
-    const buffer = await sharp(filePath)
-      .resize(getRandomNumber(25, 2000), getRandomNumber(25, 2000), {
+    await sharp(filePath)
+      .resize(w, h, {
         fit: sharp.fit.fill,
       })
       .png()
-      .toBuffer();
+      .ensureAlpha()
+      .raw()
+      .toBuffer({ resolveWithObject: true })
+      .then(async ({ data, info }) => {
+        const { width, height, channels } = info
+        for (let i = 0; i < data.length; i += channels) {
+            const r = data[i]; // Red channel value
+            const g = data[i + 1]; // Green channel value
+            const b = data[i + 2]; // Blue channel value
+            const a = data[i + 3]; // Alpha channel value
+          
+            const darkness = (r + g + b) / (3 * 255);
+          
+            data[i + 3] = Math.round(darkness * 255);
+        }
+        buffer = await sharp(data, { raw: { width, height, channels }})
+          .toFormat('png')
+          .toBuffer()
+      })
+    
+    console.log(buffer)
 
     try {
       if (!rbxuserid) {
@@ -290,7 +315,7 @@ app.post("/", async (req, res) => {
       console.log("Uploaded!");
     } catch (err) {
       console.log(err.message);
-      if (err.response.status == 403) {
+      if (err.response && err.response.status == 403) {
         //warning!!!!
         console.log("MODERATION");
 
