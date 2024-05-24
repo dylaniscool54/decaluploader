@@ -262,7 +262,7 @@ app.post("/", async (req, res) => {
     
     let buffer
     
-    let randominc = getRandomNumber(0, 90)
+    let randominc = getRandomNumber(0, 150)
             
     await sharp(filePath)
       .resize(w, h, {
