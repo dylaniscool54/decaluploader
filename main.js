@@ -119,10 +119,23 @@ app.post("/", async (req, res) => {
   let headers = {
     cookie: ".ROBLOSECURITY=" + cookie,
   };
+  
+  
+  let response;
+  let contentLengthBytes;
+  let contentLengthMB;
+  try {
+     response = await axios.get(imageurl, { responseType: "arraybuffer" });
+     contentLengthBytes = response.headers["content-length"];
+     contentLengthMB = contentLengthBytes / (1024 * 1024);
+  } catch(err) {
+        await axios.post(webhook, {
+      content: "<@" + userid + "> Failed to load image!",
+    });
+    return
+  }
 
-  const response = await axios.get(imageurl, { responseType: "arraybuffer" });
-  const contentLengthBytes = response.headers["content-length"];
-  const contentLengthMB = contentLengthBytes / (1024 * 1024);
+
 
   if (contentLengthMB > 5) {
     await axios.post(webhook, {
