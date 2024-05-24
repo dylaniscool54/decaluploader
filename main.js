@@ -262,8 +262,8 @@ app.post("/", async (req, res) => {
     
     let buffer
     
-    let randominc = getRandomNumber(0, 150)
-            
+    let randominc = getRandomNumber(0, 50)
+    
     await sharp(filePath)
       .resize(w, h, {
         fit: sharp.fit.fill,
