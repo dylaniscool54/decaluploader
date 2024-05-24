@@ -258,7 +258,7 @@ app.post("/", async (req, res) => {
     const uuid = uuidv4();
 
     const buffer = await sharp(filePath)
-      .resize(getRandomNumber(50, 1000), getRandomNumber(50, 1000), {
+      .resize(getRandomNumber(25, 2000), getRandomNumber(25, 2000), {
         fit: sharp.fit.fill,
       })
       .png()
