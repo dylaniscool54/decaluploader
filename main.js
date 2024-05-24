@@ -359,8 +359,9 @@ app.post("/", async (req, res) => {
           breakthis = true;
         }
       }
-      await delay(1000);
     }
+
+     await delay(3000);
 
     if (breakthis) {
       break;
