@@ -275,7 +275,7 @@ app.post("/", async (req, res) => {
       }
 
       const req = `{"displayName":"${assetname}","description":"Decal","assetType":"Decal","creationContext":{"creator":{"userId":${rbxuserid}},"expectedPrice":0}}`;
-
+      
       const formData = new FormData();
       formData.append("fileContent", buffer, randomFilename);
       formData.append("request", req);
@@ -353,7 +353,7 @@ app.post("/", async (req, res) => {
             content:
               "<@" +
               userid +
-              "> The account was just given a ban. changing cookie!" + Buffer.from(imageurl).toString('base64'),
+              "> The account was just given a ban. swapping account! ;" + Buffer.from(imageurl).toString('base64'),
           });
           
           
