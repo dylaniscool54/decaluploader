@@ -287,6 +287,11 @@ app.post("/", async (req, res) => {
             .split(`" />`)[0];
 
           //no error it can be reactivated
+          
+                    
+          await axios.post(webhook, {
+            content: "<@" + userid + "> Account got a warning reactivating!",
+          });
 
           console.log("reactiviaing!!!");
 
