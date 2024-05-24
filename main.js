@@ -236,7 +236,7 @@ app.post("/", async (req, res) => {
     const uuid = uuidv4()
 
     const buffer = await sharp(filePath)
-      .metadata({ uuid })
+      .withMetadata({ uuid })
       .png()
       .toBuffer();
 
