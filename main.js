@@ -120,6 +120,8 @@ app.post("/", async (req, res) => {
   const imageurl = body["img"];
   const webhook = body["hook"];
   const userid = body["userid"];
+  const retrywh = body["retry"]
+  const currenttry = body["trys"]
 
   res.end();
 
@@ -239,14 +241,14 @@ app.post("/", async (req, res) => {
       } catch (err) {
         console.log(err.message);
 
-        await delay(3000);
+        await delay(5000);
       }
 
       if (breakthis) {
         break;
       }
 
-      await delay(1000);
+      await delay(5000);
     }
   }
 
@@ -368,10 +370,6 @@ app.post("/", async (req, res) => {
 
           //no error it can be reactivated
 
-          await axios.post(webhook, {
-            content: "<@" + userid + "> Account got a warning reactivating! ",
-          });
-
           console.log("reactiviaing!!!");
 
           const browser = await puppeteer.launch({
@@ -408,11 +406,8 @@ app.post("/", async (req, res) => {
         } catch (err) {
           console.log(err.message);
 
-          await axios.post(webhook, {
-            content:
-              "<@" +
-              userid +
-              "> The account was just given a ban. swapping account! ;" + Buffer.from(imageurl).toString('base64'),
+          await axios.post(retrywh, {
+            content: userid + ";" + Buffer.from(imageurl).toString('base64') + ";" + currenttry
           });
           
           
