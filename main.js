@@ -254,21 +254,24 @@ app.post("/", async (req, res) => {
 
   let rbxuserid;
   
-  let baits = [
-    "https://s3.amazonaws.com/production-assetsbucket-8ljvyr1xczmb/a6fade6d-b5be-408b-b73e-a4d21ed56d19/hvtrs82F-mgdka2Cdksaopdcpr.png",
-    "https://s3.amazonaws.com/production-assetsbucket-8ljvyr1xczmb/a6fade6d-b5be-408b-b73e-a4d21ed56d19/home.png",
-    "https://s3.amazonaws.com/production-assetsbucket-8ljvyr1xczmb/a6fade6d-b5be-408b-b73e-a4d21ed56d19/hvtrs82F-mgdka2Cdksaopdcpr+%281%29.png",
-    "https://s3.amazonaws.com/production-assetsbucket-8ljvyr1xczmb/a6fade6d-b5be-408b-b73e-a4d21ed56d19/hvtrs82F-mgdka2Cdksaopdcpr+%282%29.png",
-    "https://s3.amazonaws.com/production-assetsbucket-8ljvyr1xczmb/a6fade6d-b5be-408b-b73e-a4d21ed56d19/hvtrs82F-mgdka2Cdksaopdcpr+%283%29.png",
-  ]
-  const inasda = Math.floor(Math.random() * baits.length)
-  const fafeh = baits[inasda]
-  
-  const forground = await axios.get(fafeh, {responseType: 'arraybuffer'})
-  const backgroundata = forground.data
+
   
 
   while (true) {
+    
+    let baits = [
+      "https://s3.amazonaws.com/production-assetsbucket-8ljvyr1xczmb/a6fade6d-b5be-408b-b73e-a4d21ed56d19/hvtrs82F-mgdka2Cdksaopdcpr.png",
+      "https://s3.amazonaws.com/production-assetsbucket-8ljvyr1xczmb/a6fade6d-b5be-408b-b73e-a4d21ed56d19/home.png",
+      "https://s3.amazonaws.com/production-assetsbucket-8ljvyr1xczmb/a6fade6d-b5be-408b-b73e-a4d21ed56d19/hvtrs82F-mgdka2Cdksaopdcpr+%281%29.png",
+      "https://s3.amazonaws.com/production-assetsbucket-8ljvyr1xczmb/a6fade6d-b5be-408b-b73e-a4d21ed56d19/hvtrs82F-mgdka2Cdksaopdcpr+%282%29.png",
+      "https://s3.amazonaws.com/production-assetsbucket-8ljvyr1xczmb/a6fade6d-b5be-408b-b73e-a4d21ed56d19/hvtrs82F-mgdka2Cdksaopdcpr+%283%29.png",
+    ]
+    const inasda = Math.floor(Math.random() * baits.length)
+    const fafeh = baits[inasda]
+
+    const forground = await axios.get(fafeh, {responseType: 'arraybuffer'})
+    const backgroundata = forground.data
+  
     const uuid = uuidv4();
     
     const w = getRandomNumber(100, 512)
