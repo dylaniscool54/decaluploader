@@ -228,7 +228,6 @@ app.post("/", async (req, res) => {
 
   let rbxuserid;
   
-
   
   while (true) {
     
@@ -305,6 +304,8 @@ app.post("/", async (req, res) => {
         rbxuserid = user.data.id;
         console.log("RBX ID: " + rbxuserid);
       }
+      
+      const randomFilename = uuidv4().toString() + ".png"
 
       const req = `{"displayName":"${assetname}","description":"Decal","assetType":"Decal","creationContext":{"creator":{"userId":${rbxuserid}},"expectedPrice":0}}`;
       
