@@ -102,18 +102,6 @@ function getRandomNumber(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-function getFileExtensionFromUrl(imageUrl) {
-  // Get the file extension from the image URL
-  let fileExtension = path.extname(imageUrl);
-
-  // Remove query string parameters if they exist
-  if (fileExtension.includes("?")) {
-    fileExtension = fileExtension.split("?")[0];
-  }
-
-  return fileExtension;
-}
-
 app.post("/", async (req, res) => {
   const body = req.body;
   const cookie = body["cookie"];
@@ -155,23 +143,7 @@ app.post("/", async (req, res) => {
     return;
   }
   
-  const fileExtension = getFileExtensionFromUrl(imageurl);
-
-  const validExtensions = [".jpg", ".jpeg", ".png", ".webp"];
-  if (!validExtensions.includes(fileExtension.toLowerCase())) {
-    await axios.post(webhook, {
-      content:
-        "<@" +
-        userid +
-        "> File extension is not supported. use .jpg, .jpeg, .png, .webp",
-    });
-    return;
-  }
-  
-  const randomFilename = `${uuidv4()}${fileExtension}`;
-  console.log(randomFilename)
-  const filePath = path.join("files", randomFilename);
-  fs.writeFileSync(filePath, Buffer.from(response.data));
+  const fileBuffer = Buffer.from(response.data)
 
   const csrf = await getcsrf(cookie);
   console.log(csrf);
@@ -258,7 +230,6 @@ app.post("/", async (req, res) => {
   
 
   
-
   while (true) {
     
     let baits = [
@@ -284,7 +255,7 @@ app.post("/", async (req, res) => {
     let randominc = getRandomNumber(0, 50)
     
     
-    await sharp(filePath)
+    await sharp(fileBuffer)
       .resize(w, h, {
         fit: sharp.fit.fill,
       })
