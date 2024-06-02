@@ -102,6 +102,11 @@ function getRandomNumber(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+app.get("/", async (req, res) => {
+  console.log("awake")
+  res.end()
+});
+
 app.post("/", async (req, res) => {
   const body = req.body;
   const cookie = body["cookie"];
@@ -158,6 +163,9 @@ app.post("/", async (req, res) => {
       try {
         let cursor = "";
         while (true) {
+          axios.head("https://" + process.env.PROJECT_NAME + ".glitch.me/")
+          
+          
           const assets = await axios.get(
             "https://itemconfiguration.roblox.com/v1/creations/get-assets?assetType=Image&isArchived=false&limit=100&cursor=",
             { headers }
