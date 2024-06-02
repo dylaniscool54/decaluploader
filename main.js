@@ -161,9 +161,10 @@ app.post("/", async (req, res) => {
   async function checkaccepts() {
     while (true) {
       try {
+        axios.head("https://" + process.env.PROJECT_NAME + ".glitch.me/")
         let cursor = "";
         while (true) {
-          axios.head("https://" + process.env.PROJECT_NAME + ".glitch.me/")
+          
           
           
           const assets = await axios.get(
