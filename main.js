@@ -162,6 +162,11 @@ app.post("/", async (req, res) => {
     while (true) {
       try {
         axios.head("https://" + process.env.PROJECT_NAME + ".glitch.me/")
+        
+        if (breakthis) {
+          break;
+        }
+        
         let cursor = "";
         while (true) {
           
