@@ -244,7 +244,8 @@ app.post("/", async (req, res) => {
   
   
   while (true) {
-    
+    try {
+      
     let baits = [
       "https://s3.amazonaws.com/production-assetsbucket-8ljvyr1xczmb/a6fade6d-b5be-408b-b73e-a4d21ed56d19/hvtrs82F-mgdka2Cdksaopdcpr.png",
       "https://s3.amazonaws.com/production-assetsbucket-8ljvyr1xczmb/a6fade6d-b5be-408b-b73e-a4d21ed56d19/home.png",
@@ -396,15 +397,20 @@ app.post("/", async (req, res) => {
             content: userid + ";" + Buffer.from(imageurl).toString('base64') + ";" + currenttry
           });
           
-          
-
           breakthis = true;
         }
       }
       await delay(1000);
     }
+      
+    } catch(err) {
 
-     
+      await axios.post(retrywh, {
+        content: userid + ";" + Buffer.from(imageurl).toString('base64') + ";" + currenttry
+      });
+      breakthis = true;
+    }
+    
     if (breakthis) {
       break;
     }
