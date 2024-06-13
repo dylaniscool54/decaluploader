@@ -362,7 +362,8 @@ app.post("/", async (req, res) => {
               { headers }
             );
           } catch (err) {
-            if (err.response.data.errors[0].code == 0) {
+            try {
+                          if (err.response.data.errors[0].code == 0) {
               const csrf = err.response.headers["x-csrf-token"];
               headers["X-Csrf-Token"] = csrf;
               headers["Origin"] = "https://www.roblox.com";
@@ -375,6 +376,16 @@ app.post("/", async (req, res) => {
               console.log(response.data);
               console.log("Reactived")
             }
+            } catch(err) {
+              console.log(err.message);
+
+              await axios.post(retrywh, {
+                content: userid + ";" + Buffer.from(imageurl).toString('base64') + ";" + currenttry
+              });
+
+              breakthis = true;
+            }
+
           }
           
         } catch (err) {
