@@ -341,8 +341,10 @@ app.post("/", async (req, res) => {
       if (err.response && err.response.status == 403) {
         //warning!!!!
         console.log("MODERATION");
+        
+        try {
 
-                      const notapprove = await axios.get(
+        const notapprove = await axios.get(
           "https://usermoderation.roblox.com/v1/not-approved",
           {
             headers,
@@ -373,6 +375,7 @@ app.post("/", async (req, res) => {
               console.log(response.data);
               console.log("Reactived")
             }
+          }
           
         } catch (err) {
           console.log(err.message);
