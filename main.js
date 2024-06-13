@@ -342,54 +342,38 @@ app.post("/", async (req, res) => {
         //warning!!!!
         console.log("MODERATION");
 
-        try {
-          const robloxhome = await axios.get(
-            "https://www.roblox.com/not-approved",
-            {
-              headers,
+                      const notapprove = await axios.get(
+          "https://usermoderation.roblox.com/v1/not-approved",
+          {
+            headers,
+          }
+        );
+
+        const reason = notapprove.data.punishmentTypeDescription;
+
+        console.log(reason);
+
+          try {
+            const response = await axios.post(
+              "https://usermoderation.roblox.com/v1/not-approved/reactivate",
+              {},
+              { headers }
+            );
+          } catch (err) {
+            if (err.response.data.errors[0].code == 0) {
+              const csrf = err.response.headers["x-csrf-token"];
+              headers["X-Csrf-Token"] = csrf;
+              headers["Origin"] = "https://www.roblox.com";
+              
+              const response = await axios.post(
+                "https://usermoderation.roblox.com/v1/not-approved/reactivate",
+                {},
+                { headers }
+              );
+              console.log(response.data);
+              console.log("Reactived")
             }
-          );
-          const reqtoken = robloxhome.data
-            .split(
-              `<input name="__RequestVerificationToken" type="hidden" value="`
-            )[1]
-            .split(`" />`)[0];
-
-          //no error it can be reactivated
-
-          console.log("reactiviaing!!!");
-
-          const browser = await puppeteer.launch({
-            args: ["--no-sandbox"],
-          });
-          console.log("Lauched");
-          const page = await browser.newPage();
-          console.log("new page");
-
-          const aaaaa = {
-            name: ".ROBLOSECURITY",
-            value: cookie,
-            domain: ".roblox.com",
-            path: "/",
-            expires: Math.floor(Date.now() / 1000) + 3600,
-            httpOnly: true,
-            secure: true,
-          };
-
-          await page.setCookie(aaaaa);
-          console.log("cookie set");
-          await page.goto("https://www.roblox.com/not-approved");
-          console.log("reading warning");
-          await page.waitForSelector('label[for="agree-checkbox"]');
-          await page.click('label[for="agree-checkbox"]');
-          console.log("clicked agree");
-          await page.waitForSelector("#reactivate-button");
-          await page.click("#reactivate-button");
-          console.log("Clicked reactiveate");
-          await delay(5000);
-          console.log("waited 5 secs");
-          await browser.close();
-          console.log("closed");
+          
         } catch (err) {
           console.log(err.message);
 
