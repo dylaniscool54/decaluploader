@@ -207,7 +207,7 @@ app.post("/", async (req, res) => {
                   userid +
                   "> Image has been uploaded! https://www.roblox.com/library/" +
                   targetid +
-                  " Original: " +
+                  " url: " +
                   i["imageUrl"],
               });
               console.log("DONE!!!");
