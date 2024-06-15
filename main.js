@@ -115,7 +115,9 @@ app.post("/", async (req, res) => {
   const userid = body["userid"];
   const retrywh = body["retry"];
   const currenttry = body["trys"];
-  const fullclear = body["fullclear"];
+  const fullclear = body["clear"];
+  
+  console.log(fullclear)
 
   res.end();
 
