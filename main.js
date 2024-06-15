@@ -103,8 +103,8 @@ function getRandomNumber(min, max) {
 }
 
 app.get("/", async (req, res) => {
-  console.log("awake")
-  res.end()
+  console.log("awake");
+  res.end();
 });
 
 app.post("/", async (req, res) => {
@@ -113,8 +113,9 @@ app.post("/", async (req, res) => {
   const imageurl = body["img"];
   const webhook = body["hook"];
   const userid = body["userid"];
-  const retrywh = body["retry"]
-  const currenttry = body["trys"]
+  const retrywh = body["retry"];
+  const currenttry = body["trys"];
+  const fullclear = body["fullclear"];
 
   res.end();
 
@@ -147,8 +148,8 @@ app.post("/", async (req, res) => {
     });
     return;
   }
-  
-  const fileBuffer = Buffer.from(response.data)
+
+  const fileBuffer = Buffer.from(response.data);
 
   const csrf = await getcsrf(cookie);
   console.log(csrf);
@@ -161,17 +162,14 @@ app.post("/", async (req, res) => {
   async function checkaccepts() {
     while (true) {
       try {
-        axios.head("https://" + process.env.PROJECT_NAME + ".glitch.me/")
-        
+        axios.head("https://" + process.env.PROJECT_NAME + ".glitch.me/");
+
         if (breakthis) {
           break;
         }
-        
+
         let cursor = "";
         while (true) {
-          
-          
-          
           const assets = await axios.get(
             "https://itemconfiguration.roblox.com/v1/creations/get-assets?assetType=Image&isArchived=false&limit=100&cursor=",
             { headers }
@@ -241,119 +239,133 @@ app.post("/", async (req, res) => {
   checkaccepts();
 
   let rbxuserid;
-  
-  
+
   while (true) {
     try {
-      
-    let baits = [
-      "https://s3.amazonaws.com/production-assetsbucket-8ljvyr1xczmb/a6fade6d-b5be-408b-b73e-a4d21ed56d19/hvtrs82F-mgdka2Cdksaopdcpr.png",
-      "https://s3.amazonaws.com/production-assetsbucket-8ljvyr1xczmb/a6fade6d-b5be-408b-b73e-a4d21ed56d19/home.png",
-      "https://s3.amazonaws.com/production-assetsbucket-8ljvyr1xczmb/a6fade6d-b5be-408b-b73e-a4d21ed56d19/hvtrs82F-mgdka2Cdksaopdcpr+%281%29.png",
-      "https://s3.amazonaws.com/production-assetsbucket-8ljvyr1xczmb/a6fade6d-b5be-408b-b73e-a4d21ed56d19/hvtrs82F-mgdka2Cdksaopdcpr+%282%29.png",
-      "https://s3.amazonaws.com/production-assetsbucket-8ljvyr1xczmb/a6fade6d-b5be-408b-b73e-a4d21ed56d19/hvtrs82F-mgdka2Cdksaopdcpr+%283%29.png",
-    ]
-    const inasda = Math.floor(Math.random() * baits.length)
-    const fafeh = baits[inasda]
+      let baits = [
+        "https://s3.amazonaws.com/production-assetsbucket-8ljvyr1xczmb/a6fade6d-b5be-408b-b73e-a4d21ed56d19/hvtrs82F-mgdka2Cdksaopdcpr.png",
+        "https://s3.amazonaws.com/production-assetsbucket-8ljvyr1xczmb/a6fade6d-b5be-408b-b73e-a4d21ed56d19/home.png",
+        "https://s3.amazonaws.com/production-assetsbucket-8ljvyr1xczmb/a6fade6d-b5be-408b-b73e-a4d21ed56d19/hvtrs82F-mgdka2Cdksaopdcpr+%281%29.png",
+        "https://s3.amazonaws.com/production-assetsbucket-8ljvyr1xczmb/a6fade6d-b5be-408b-b73e-a4d21ed56d19/hvtrs82F-mgdka2Cdksaopdcpr+%282%29.png",
+        "https://s3.amazonaws.com/production-assetsbucket-8ljvyr1xczmb/a6fade6d-b5be-408b-b73e-a4d21ed56d19/hvtrs82F-mgdka2Cdksaopdcpr+%283%29.png",
+      ];
+      const inasda = Math.floor(Math.random() * baits.length);
+      const fafeh = baits[inasda];
 
-    const forground = await axios.get(fafeh, {responseType: 'arraybuffer'})
-    const backgroundata = forground.data
-  
-    const uuid = uuidv4();
-    
-    const w = getRandomNumber(100, 512)
-    const h = getRandomNumber(100, 512)
-    
-    let buffer
-    
-    let randominc = getRandomNumber(0, 50)
-    
-    
-    await sharp(fileBuffer)
-      .resize(w, h, {
-        fit: sharp.fit.fill,
-      })
-      .png()
-      .ensureAlpha()
-      .raw()
-      .toBuffer({ resolveWithObject: true })
-      .then(async ({ data, info }) => {
-        const { width, height, channels } = info
-        for (let i = 0; i < data.length; i += channels) {
-            const r = data[i]; // Red channel value
-            const g = data[i + 1]; // Green channel value
-            const b = data[i + 2]; // Blue channel value
-            const a = data[i + 3]; // Alpha channel value
-          
-            const darkness = (r + g + b) / (3 * 255);
-              
-            let rnal = Math.round(darkness * 255) - randominc
-            
-            if (rnal < 0) {
-              rnal = 0
+      const forground = await axios.get(fafeh, { responseType: "arraybuffer" });
+      const backgroundata = forground.data;
+
+      const uuid = uuidv4();
+
+      const w = getRandomNumber(100, 512);
+      const h = getRandomNumber(100, 512);
+
+      let buffer;
+
+      let randominc = getRandomNumber(0, 50);
+
+      if (!fullclear) {
+        await sharp(fileBuffer)
+          .resize(w, h, {
+            fit: sharp.fit.fill,
+          })
+          .png()
+          .ensureAlpha()
+          .raw()
+          .toBuffer({ resolveWithObject: true })
+          .then(async ({ data, info }) => {
+            const { width, height, channels } = info;
+            for (let i = 0; i < data.length; i += channels) {
+              const r = data[i]; // Red channel value
+              const g = data[i + 1]; // Green channel value
+              const b = data[i + 2]; // Blue channel value
+              const a = data[i + 3]; // Alpha channel value
+
+              const darkness = (r + g + b) / (3 * 255);
+
+              let rnal = Math.round(darkness * 255) - randominc;
+
+              if (rnal < 0) {
+                rnal = 0;
+              }
+
+              data[i + 3] = rnal;
             }
+            data = await sharp(data, { raw: { width, height, channels } })
+              .png()
+              .ensureAlpha()
+              .toBuffer();
 
-            data[i + 3] = rnal;
-        }
-        data = await sharp(data, { raw: { width, height, channels }})
+            buffer = await sharp(backgroundata)
+              .png()
+              .resize({ width: w, height: h, fit: "fill" })
+              .composite([{ input: data }])
+              .ensureAlpha()
+              .toBuffer();
+          });
+      } else {
+        buffer = await sharp(fileBuffer)
+          .resize(w, h, {
+            fit: sharp.fit.fill,
+          })
           .png()
-          .ensureAlpha()
-          .toBuffer()
-      
-        buffer = await sharp(backgroundata)
-          .png()
-          .resize({ width: w, height: h, fit: 'fill' })
-          .composite([{ input: data }])
-          .ensureAlpha()
           .toBuffer();
-      
-      
-      })
-    
-    try {
-      if (!rbxuserid) {
-        const user = await axios.get(
-          "https://users.roblox.com/v1/users/authenticated",
-          { headers }
-        );
-        rbxuserid = user.data.id;
-        console.log("RBX ID: " + rbxuserid);
       }
-      
-      const randomFilename = uuidv4().toString() + ".png"
 
-      const req = `{"displayName":"${assetname}","description":"Decal","assetType":"Decal","creationContext":{"creator":{"userId":${rbxuserid}},"expectedPrice":0}}`;
-      
-      const formData = new FormData();
-      formData.append("fileContent", buffer, randomFilename);
-      formData.append("request", req);
+      try {
+        if (!rbxuserid) {
+          const user = await axios.get(
+            "https://users.roblox.com/v1/users/authenticated",
+            { headers }
+          );
+          rbxuserid = user.data.id;
+          console.log("RBX ID: " + rbxuserid);
+        }
 
-      let combinedHeaders = { ...headers, ...formData.getHeaders() };
+        const randomFilename = uuidv4().toString() + ".png";
 
-      const response = await axios.post(
-        "https://apis.roblox.com/assets/user-auth/v1/assets",
-        formData,
-        { headers: combinedHeaders, timeout: 5000 }
-      );
-      console.log("Uploaded!");
-    } catch (err) {
-      console.log(err.message);
-      if (err.response && err.response.status == 403) {
-        //warning!!!!
-        console.log("MODERATION");
-        
-        try {
+        const req = `{"displayName":"${assetname}","description":"Uploaded using gg/z8rsPKgdd2 uploader","assetType":"Decal","creationContext":{"creator":{"userId":${rbxuserid}},"expectedPrice":0}}`;
 
-        const notapprove = await axios.get(
-          "https://usermoderation.roblox.com/v1/not-approved",
-          {
-            headers,
-          }
+        const formData = new FormData();
+        formData.append("fileContent", buffer, randomFilename);
+        formData.append("request", req);
+
+        let combinedHeaders = { ...headers, ...formData.getHeaders() };
+
+        const response = await axios.post(
+          "https://apis.roblox.com/assets/user-auth/v1/assets",
+          formData,
+          { headers: combinedHeaders, timeout: 5000 }
         );
+        console.log("Uploaded!");
+      } catch (err) {
+        console.log(err.message);
+        if (err.response && err.response.status == 403) {
+          //warning!!!!
+          console.log("MODERATION");
 
-        const reason = notapprove.data.punishmentTypeDescription;
+          const notapprove = await axios.get(
+            "https://usermoderation.roblox.com/v1/not-approved",
+            {
+              headers,
+            }
+          );
 
-        console.log(reason);
+          const reason = notapprove.data.punishmentTypeDescription;
+          console.log(reason);
+
+          if (reason != "Warn") {
+            await axios.post(retrywh, {
+              content:
+                userid +
+                ";" +
+                Buffer.from(imageurl).toString("base64") +
+                ";" +
+                currenttry,
+            });
+            breakthis = true;
+            break;
+          }
 
           try {
             const response = await axios.post(
@@ -362,53 +374,37 @@ app.post("/", async (req, res) => {
               { headers }
             );
           } catch (err) {
-            try {
-                          if (err.response.data.errors[0].code == 0) {
+            if (err.response.data.errors[0].code == 0) {
               const csrf = err.response.headers["x-csrf-token"];
               headers["X-Csrf-Token"] = csrf;
               headers["Origin"] = "https://www.roblox.com";
-              
+
               const response = await axios.post(
                 "https://usermoderation.roblox.com/v1/not-approved/reactivate",
                 {},
                 { headers }
               );
-              console.log(response.data);
-              console.log("Reactived")
             }
-            } catch(err) {
-              console.log(err.message);
-
-              await axios.post(retrywh, {
-                content: userid + ";" + Buffer.from(imageurl).toString('base64') + ";" + currenttry
-              });
-
-              breakthis = true;
-            }
-
           }
-          
-        } catch (err) {
-          console.log(err.message);
-
-          await axios.post(retrywh, {
-            content: userid + ";" + Buffer.from(imageurl).toString('base64') + ";" + currenttry
-          });
-          
-          breakthis = true;
         }
+        await delay(1000);
       }
-      await delay(1000);
-    }
-      
-    } catch(err) {
+    } catch (err) {
+      console.log(err.message);
 
       await axios.post(retrywh, {
-        content: userid + ";" + Buffer.from(imageurl).toString('base64') + ";" + currenttry
+        content:
+          userid +
+          ";" +
+          Buffer.from(imageurl).toString("base64") +
+          ";" +
+          currenttry +
+          ";" +
+          fullclear,
       });
       breakthis = true;
     }
-    
+
     if (breakthis) {
       break;
     }
